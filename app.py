@@ -1,25 +1,19 @@
 import flet as ft
+import flet.fastapi as flet_fastapi
 
-def main(page: ft.Page):
-    page.title = "Flet Chat"
+async def main(page: ft.Page):
+    counter = ft.Text("0", size=50, data=0)
 
-    # subscribe to broadcast messages
-    def on_message(msg):
-        messages.controls.append(ft.Text(msg))
-        page.update()
+    async def add_click(e):
+        counter.data += 1
+        counter.value = str(counter.data)
+        await counter.update_async()
 
-    page.pubsub.subscribe(on_message)
+    page.floating_action_button = ft.FloatingActionButton(
+        icon=ft.icons.ADD, on_click=add_click
+    )
+    await page.add_async(
+        ft.Container(counter, alignment=ft.alignment.center, expand=True)
+    )
 
-    def send_click(e):
-        page.pubsub.send_all(f"{user.value}: {message.value}")
-        # clean up the form
-        message.value = ""
-        page.update()
-
-    messages = ft.Column()
-    user = ft.TextField(hint_text="Your name", width=150)
-    message = ft.TextField(hint_text="Your message...", expand=True)  # fill all the space
-    send = ft.ElevatedButton("Send", on_click=send_click)
-    page.add(messages, ft.Row(controls=[user, message, send]))
-
-ft.app(target=main, view=ft.AppView.WEB_BROWSER)
+app = flet_fastapi.app(main)
