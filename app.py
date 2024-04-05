@@ -1,19 +1,8 @@
 import flet as ft
-import flet.fastapi as flet_fastapi
 
-async def main(page: ft.Page):
-    counter = ft.Text("0", size=50, data=0)
+def main(page: ft.Page):
+    t = ft.Text(value="Hello, world!", color="green")
+    page.controls.append(t)
+    page.update()
 
-    async def add_click(e):
-        counter.data += 1
-        counter.value = str(counter.data)
-        await counter.update_async()
-
-    page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.icons.ADD, on_click=add_click
-    )
-    await page.add_async(
-        ft.Container(counter, alignment=ft.alignment.center, expand=True)
-    )
-
-app = flet_fastapi.app(main)
+ft.app(target=main,view=ft.AppView.WEB_BROWSER,port=8080)
