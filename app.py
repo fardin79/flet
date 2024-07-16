@@ -1,8 +1,6 @@
 import flet as ft
 
 def main(page: ft.Page):
-    t = ft.Text(value="Hello, world!", color="green")
-    page.controls.append(t)
-    page.update()
+    page.add(ft.Text("Hello ASGI!"))
 
-ft.app(target=main,view=ft.AppView.WEB_BROWSER,port=8080)
+app = ft.app(main, export_asgi_app=True)
